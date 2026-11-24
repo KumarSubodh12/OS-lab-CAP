@@ -104,6 +104,4 @@ The test suite checks scheduling results, invalid burst-time handling, memory al
 - If Bash reports permission denied, run `chmod +x scripts/run.sh`.
 - If a module import fails, run the command from the project root (the folder containing `main.py`).
 
-## Source Acknowledgement
 
-This repository is based on the project source published at [monishkabajaj/OS-LAB-CAPTSONE-PROJECT-](https://github.com/monishkabajaj/OS-LAB-CAPTSONE-PROJECT-), which lists Monishka Bajaj as the original student author. That attribution is retained here for transparency.
