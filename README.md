@@ -3,35 +3,40 @@
 **Student / Repository Maintainer:** Kumar Subodh  
 **Roll Number:** 2401010205  
 **Course:** Operating Systems Lab (ENCS351)  
-**Language and integration:** Python 3 + Bash
+**Technology:** Python 3 and Bash
 
-## Project Overview
+## Overview
 
-OSSim is an integrated, menu-driven Python and Bash application that simulates core operating-system resource-management functions. It includes CPU scheduling, memory allocation, deadlock safety analysis, disk scheduling, algorithm comparison, CSV reporting, and activity logging.
+OSSim is a single, menu-driven application that demonstrates core operating-system resource-management functions. It brings CPU scheduling, memory allocation, deadlock safety, disk scheduling, performance comparison, CSV reporting, and activity logging into one integrated project.
 
-## Modules and Algorithms
+This repository is an adapted and maintained version of the upstream [OS-LAB-CAPTSONE-PROJECT](https://github.com/monishkabajaj/OS-LAB-CAPTSONE-PROJECT-). The upstream repository is linked here for source transparency; this version's project identification and documentation are maintained for the student listed above.
 
-| Module | Implemented algorithms / functions |
+## Features
+
+| Module | Algorithms / features |
 |---|---|
 | CPU scheduling | FCFS, non-preemptive SJF, Round Robin |
 | Memory management | First Fit, Best Fit, Worst Fit |
 | Deadlock management | Banker's safety algorithm |
 | Disk scheduling | FCFS, SSTF, SCAN |
-| Performance analysis | Average waiting time and turnaround time comparison |
-| Reporting | CSV exports and timestamped activity log |
+| Performance analysis | Average waiting and turnaround time comparison |
+| Reporting | CSV reports and timestamped activity log |
+| Bash integration | Run and cleanup scripts |
 
 ## Requirements
 
 - Python 3.9 or later
-- Windows: Python installed; run using PowerShell or the VS Code terminal
-- Bash integration: Git Bash or WSL on Windows; Bash is available by default on most Linux/macOS systems
-- Core simulation uses the Python standard library. `requirements.txt` lists the optional plotting dependency used for future chart extensions.
+- Windows: Python installed and available in PowerShell / VS Code terminal
+- Bash integration on Windows: Git Bash or WSL
+- Linux and macOS: Python 3 and Bash
 
-## Run the Application
+The core application uses only Python's standard library. No third-party package installation is required.
 
-### Windows (PowerShell / VS Code terminal)
+## Run
 
-From the project root (the folder containing `main.py`):
+Open a terminal in the project root (the directory containing `main.py`).
+
+### Windows PowerShell / VS Code terminal
 
 ```powershell
 python main.py
@@ -44,19 +49,19 @@ chmod +x scripts/run.sh
 ./scripts/run.sh
 ```
 
-## Main Menu
+## Main menu
 
-1. **CPU Scheduling** – run FCFS, non-preemptive SJF, or Round Robin.
-2. **Memory Management** – run First Fit, Best Fit, or Worst Fit.
-3. **Deadlock Detection** – evaluate a resource state using Banker's safety algorithm.
-4. **Disk Scheduling** – run FCFS, SSTF, or SCAN.
-5. **Performance Comparison** – compare CPU algorithms using a common sample workload.
-6. **Activity Log** – view recent application events.
-0. **Exit** – close the application.
+1. **CPU Scheduling** – select FCFS, SJF, or Round Robin.
+2. **Memory Management** – select First Fit, Best Fit, or Worst Fit.
+3. **Deadlock Detection** – check a resource allocation state using Banker's algorithm.
+4. **Disk Scheduling** – select FCFS, SSTF, or SCAN.
+5. **Performance Comparison** – compare CPU algorithms using the same sample workload.
+6. **Activity Log** – display recent actions.
+0. **Exit** – close OSSim.
 
-## Sample Input
+## Sample process dataset
 
-The file `data/sample_processes.csv` contains the sample CPU process workload:
+The file `data/sample_processes.csv` contains:
 
 | PID | Arrival time | Burst time |
 |---|---:|---:|
@@ -65,43 +70,45 @@ The file `data/sample_processes.csv` contains the sample CPU process workload:
 | P3 | 4 | 1 |
 | P4 | 5 | 4 |
 
-The memory, deadlock, and disk modules also include built-in teaching datasets for quick demonstrations.
+The CPU menu also provides this built-in sample. Memory, deadlock, and disk modules include their own documented demonstration datasets.
 
-## Generated Output
+## Output files
 
-The application automatically creates these folders when needed:
+OSSim creates these directories automatically when it runs:
 
-- `reports/` – CSV reports for CPU scheduling, memory allocation, disk scheduling, and algorithm comparisons.
-- `logs/` – `activity.log`, containing timestamped application activity.
+- `reports/` – CSV files containing scheduling, memory, disk, and comparison results.
+- `logs/` – `activity.log`, which records application activity with timestamps.
 
-Generated output is intentionally excluded from version control by `.gitignore`.
+Generated output is intentionally excluded from Git using `.gitignore`.
 
-## Run the Tests
+## Run tests
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-The test suite checks scheduling results, invalid burst-time handling, memory allocation, Banker's safety detection, and disk request boundaries.
+The test suite covers normal algorithm results, invalid inputs, allocation failure, Banker's safety validation, and disk-boundary / SCAN cases.
 
-## Bash Scripts
+## Bash scripts
 
-- `scripts/run.sh` – launches the Python application from the project root.
-- `scripts/cleanup.sh` – removes generated CSV reports and the activity log while preserving source files.
+- `scripts/run.sh` – locates the project root and launches the Python application.
+- `scripts/cleanup.sh` – removes generated CSV reports and the activity log without deleting source files.
 
-## Design Notes and Assumptions
+## Algorithms and assumptions
 
 - CPU scheduling uses integer time units. SJF is non-preemptive.
-- Round Robin uses a user-supplied positive time quantum.
-- Memory blocks are represented as variable-sized free regions. Each request is allocated once and the unused capacity remains available in that block.
-- Banker's algorithm calculates `Need = Maximum − Allocation` and checks whether a safe process-completion sequence exists.
-- Disk tracks are numbered from 0 through 199. SCAN first moves toward higher-numbered tracks and then reverses direction.
-- OSSim is an educational simulator. It does not control real operating-system processes, physical RAM, or storage devices.
+- Round Robin uses a positive time quantum. Newly arrived processes are added to the ready queue before the pre-empted process is requeued.
+- Memory uses variable-sized available blocks. Each request is assigned to at most one block.
+- Banker's algorithm calculates `Need = Maximum − Allocation` and searches for a safe completion sequence.
+- Disk tracks range from 0 to 199 by default. SCAN initially moves toward higher-numbered tracks, reaches the upper boundary when it must reverse to service lower requests, and then moves downward.
+- OSSim is an educational simulator; it does not control real processes, physical RAM, or storage hardware.
+
+## Limitations and future enhancements
+
+The simulator uses deterministic teaching datasets. Possible extensions include preemptive SJF, priority scheduling, paging and page replacement, interactive resource requests, LOOK / C-LOOK, configurable CSV input for every module, and graphical performance charts.
 
 ## Troubleshooting
 
 - If `python` is not recognized on Windows, install Python and enable **Add Python to PATH**, or try `py main.py`.
 - If Bash reports permission denied, run `chmod +x scripts/run.sh`.
-- If a module import fails, run the command from the project root (the folder containing `main.py`).
-
-
+- If imports fail, make sure the terminal is in the project root.
