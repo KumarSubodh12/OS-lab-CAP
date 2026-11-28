@@ -1,114 +1,76 @@
-# OSSim – OS Resource Management Simulator
+# OSLab CAP
 
-**Student / Repository Maintainer:** Kumar Subodh  
-**Roll Number:** 2401010205  
-**Course:** Operating Systems Lab (ENCS351)  
-**Technology:** Python 3 and Bash
+### Interactive Operating Systems Laboratory
 
-## Overview
+**Project author and maintainer:** Kumar Subodh · **Roll number:** 2401010205
+**Course:** Operating Systems Lab · ENCS351
 
-OSSim is a single, menu-driven application that demonstrates core operating-system resource-management functions. It brings CPU scheduling, memory allocation, deadlock safety, disk scheduling, performance comparison, CSV reporting, and activity logging into one integrated project.
+OSLab CAP is a standalone, full-stack learning website for exploring operating-systems algorithms. It combines a responsive browser interface with a Python API that validates simulator inputs and calculates results. This repository contains the application source and its deployment configuration.
 
-This repository is an adapted and maintained version of the upstream [OS-LAB-CAPTSONE-PROJECT](https://github.com/monishkabajaj/OS-LAB-CAPTSONE-PROJECT-). The upstream repository is linked here for source transparency; this version's project identification and documentation are maintained for the student listed above.
+## Live website
 
-## Features
+**Deployment:** [https://os-lab-cap.onrender.com](https://os-lab-cap.onrender.com) · **Simulators:** [open OSLab CAP](https://os-lab-cap.onrender.com)
 
-| Module | Algorithms / features |
+The hosted version runs in public-demo mode. The monitor that reads the server's actual CPU, memory, and processes is available only when the app is run locally.
+
+## Simulators
+
+| Topic | What you can explore |
 |---|---|
-| CPU scheduling | FCFS, non-preemptive SJF, Round Robin |
-| Memory management | First Fit, Best Fit, Worst Fit |
-| Deadlock management | Banker's safety algorithm |
-| Disk scheduling | FCFS, SSTF, SCAN |
-| Performance analysis | Average waiting and turnaround time comparison |
-| Reporting | CSV reports and timestamped activity log |
-| Bash integration | Run and cleanup scripts |
+| CPU scheduling | FCFS, non-preemptive SJF, Round Robin, and Priority; Gantt timeline, waiting time, turnaround time |
+| Memory management | First Fit, Best Fit, Worst Fit, paging, segmentation, and fragmentation |
+| Deadlock | Banker’s safety check, remaining needs, and safe sequence |
+| Mini shell | `help`, `pwd`, `ls`, `cd`, `mkdir`, `touch`, `write`, `cat`, `rm`, and `clear` in an isolated virtual file space |
+| Disk scheduling | FCFS, SSTF, SCAN, C-SCAN, and LOOK; head path and seek distance |
+| Page replacement | FIFO, LRU, and Optimal; step-by-step frames, hits, and faults |
+| Resource monitor | Read-only CPU, RAM, and process snapshot on the local host |
+| Virtual file system | Create, rename, search, and delete browser-local virtual files |
+| Synchronization | Producer–Consumer, Readers–Writers, and Dining Philosophers scenarios |
+| Address translation | Page-table lookup, TLB hits/misses, and page faults |
 
-## Requirements
+All simulator inputs can be changed. The shell never launches operating-system commands and never accesses real files. The virtual file system stays in browser storage.
 
-- Python 3.9 or later
-- Windows: Python installed and available in PowerShell / VS Code terminal
-- Bash integration on Windows: Git Bash or WSL
-- Linux and macOS: Python 3 and Bash
+## Run locally
 
-The core application uses only Python's standard library. No third-party package installation is required.
+Python 3.13 is recommended. From the repository folder:
 
-## Run
-
-Open a terminal in the project root (the directory containing `main.py`).
-
-### Windows PowerShell / VS Code terminal
+### Windows PowerShell
 
 ```powershell
-python main.py
+py -3.13 -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python app.py
 ```
 
-### Linux / macOS / Git Bash / WSL
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000).
+
+### macOS or Linux
 
 ```bash
-chmod +x scripts/run.sh
-./scripts/run.sh
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python app.py
 ```
 
-## Main menu
+To use the live resource monitor, run locally with `psutil` installed (it is included in `requirements.txt`).
 
-1. **CPU Scheduling** – select FCFS, SJF, or Round Robin.
-2. **Memory Management** – select First Fit, Best Fit, or Worst Fit.
-3. **Deadlock Detection** – check a resource allocation state using Banker's algorithm.
-4. **Disk Scheduling** – select FCFS, SSTF, or SCAN.
-5. **Performance Comparison** – compare CPU algorithms using the same sample workload.
-6. **Activity Log** – display recent actions.
-0. **Exit** – close OSSim.
+## Deploy on Render
 
-## Sample process dataset
+This repository includes `render.yaml`. In Render, create a new **Blueprint** and connect the `KumarSubodh12/OS-lab-CAP` GitHub repository. Render reads the build/start commands and enables `OSLAB_DEMO=1` for the public service. Pushes to `main` can then trigger deployments from this repository.
 
-The file `data/sample_processes.csv` contains:
+## Project structure
 
-| PID | Arrival time | Burst time |
-|---|---:|---:|
-| P1 | 0 | 7 |
-| P2 | 2 | 4 |
-| P3 | 4 | 1 |
-| P4 | 5 | 4 |
-
-The CPU menu also provides this built-in sample. Memory, deadlock, and disk modules include their own documented demonstration datasets.
-
-## Output files
-
-OSSim creates these directories automatically when it runs:
-
-- `reports/` – CSV files containing scheduling, memory, disk, and comparison results.
-- `logs/` – `activity.log`, which records application activity with timestamps.
-
-Generated output is intentionally excluded from Git using `.gitignore`.
-
-## Run tests
-
-```bash
-python -m unittest discover -s tests -v
+```text
+app.py                 Flask pages and JSON simulation API
+templates/index.html   Main application interface
+static/css/style.css   Responsive visual design
+static/js/app.js       Simulator controls and result views
+render.yaml            Render deployment configuration
+requirements.txt       Python runtime dependencies
 ```
 
-The test suite covers normal algorithm results, invalid inputs, allocation failure, Banker's safety validation, and disk-boundary / SCAN cases.
+## Ownership and implementation
 
-## Bash scripts
-
-- `scripts/run.sh` – locates the project root and launches the Python application.
-- `scripts/cleanup.sh` – removes generated CSV reports and the activity log without deleting source files.
-
-## Algorithms and assumptions
-
-- CPU scheduling uses integer time units. SJF is non-preemptive.
-- Round Robin uses a positive time quantum. Newly arrived processes are added to the ready queue before the pre-empted process is requeued.
-- Memory uses variable-sized available blocks. Each request is assigned to at most one block.
-- Banker's algorithm calculates `Need = Maximum − Allocation` and searches for a safe completion sequence.
-- Disk tracks range from 0 to 199 by default. SCAN initially moves toward higher-numbered tracks, reaches the upper boundary when it must reverse to service lower requests, and then moves downward.
-- OSSim is an educational simulator; it does not control real processes, physical RAM, or storage hardware.
-
-## Limitations and future enhancements
-
-The simulator uses deterministic teaching datasets. Possible extensions include preemptive SJF, priority scheduling, paging and page replacement, interactive resource requests, LOOK / C-LOOK, configurable CSV input for every module, and graphical performance charts.
-
-## Troubleshooting
-
-- If `python` is not recognized on Windows, install Python and enable **Add Python to PATH**, or try `py main.py`.
-- If Bash reports permission denied, run `chmod +x scripts/run.sh`.
-- If imports fail, make sure the terminal is in the project root.
+OSLab CAP is Kumar Subodh’s course project (Roll No. 2401010205). The current application in this repository is a standalone implementation of standard operating-systems concepts; it does not import application code from another project. The algorithms themselves are established topics taught in operating-systems courses.

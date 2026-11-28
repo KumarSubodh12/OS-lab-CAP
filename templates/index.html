@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="Kumar Subodh">
+  <meta name="description" content="OSLab CAP — interactive operating systems concepts and algorithm simulators.">
+  <title>OSLab CAP · Kumar Subodh · Operating Systems Lab</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body data-demo="{{ 'true' if demo else 'false' }}">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/"><span class="brand-icon">OS</span><span><b>OSLab CAP</b><small>OPERATING SYSTEMS LAB</small></span></a>
+      <div class="nav-label">SIMULATORS</div>
+      <nav id="module-list" aria-label="OS simulators"></nav>
+      <div class="sidebar-note"><span class="pulse"></span><div><b>Safe learning space</b><p>Every model runs in a sandbox. No real processes, files, or devices are changed.</p></div></div>
+      <div class="sidebar-footer">A project by <b>Kumar Subodh</b></div>
+    </aside>
+    <main class="main-content">
+      {% if demo %}<div class="demo-notice"><b>Public demonstration</b><span>Host monitoring is disabled. Simulators use sample inputs; the virtual shell never runs host commands.</span></div>{% endif %}
+      <header class="topbar"><div><span class="eyebrow">INTERACTIVE SYSTEMS WORKBENCH</span><h1 id="page-title">OSLab CAP</h1><p id="page-description">Explore how operating systems schedule and manage resources.</p></div><div class="topbar-badge"><span></span>10 SIMULATORS</div></header>
+      <div class="workspace-grid">
+        <section class="sim-card configuration">
+          <div class="section-heading"><div><span class="eyebrow">CONFIGURE</span><h2 id="sim-title">CPU Scheduling</h2></div><span class="module-index" id="module-index">01</span></div>
+          <p class="sim-description" id="sim-description"></p>
+          <div id="sim-controls"></div>
+          <div class="actions"><button id="reset-button" class="button secondary">Reset example</button><button id="run-button" class="button primary">Run simulation <span>→</span></button></div>
+        </section>
+        <section class="sim-card output-card" aria-live="polite">
+          <div class="section-heading result-heading"><div><span class="eyebrow">RESULTS</span><h2 id="result-title">Ready when you are</h2></div><span class="result-state" id="result-state">● WAITING</span></div>
+          <div id="result"><div class="empty-state"><div class="empty-glyph">⌁</div><b>Choose a simulator and run an example</b><p>Your chart, process table, or system snapshot will appear here.</p></div></div>
+        </section>
+      </div>
+      <section class="concept-card"><span class="concept-icon">i</span><div><span class="eyebrow">CONCEPT NOTE</span><p id="concept-note">Operating systems coordinate CPU time, memory, storage, and shared resources.</p></div></section>
+      <footer>OSLab CAP <span>·</span> Operating Systems Laboratory <span>·</span> Kumar Subodh</footer>
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

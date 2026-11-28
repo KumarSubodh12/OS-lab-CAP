@@ -13,4 +13,4 @@ else
     exit 1
 fi
 
-exec "$PYTHON_BIN" main.py
+exec "$PYTHON_BIN" app.py
