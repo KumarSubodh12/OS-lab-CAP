@@ -11,7 +11,7 @@ OSLab CAP is a standalone, full-stack learning website for exploring operating-s
 
 **Deployment:** [https://os-lab-cap.onrender.com](https://os-lab-cap.onrender.com) · **Simulators:** [open OSLab CAP](https://os-lab-cap.onrender.com)
 
-The hosted version runs in public-demo mode. The monitor that reads the server's actual CPU, memory, and processes is available only when the app is run locally.
+The hosted version runs in public-demo mode. When opened on Kumar's laptop, the Live Resource Monitor connects to its local OSLab companion on `127.0.0.1`; readings stay in the browser and are not sent to Render. Other visitors cannot read Kumar's laptop through the deployed site.
 
 ## Simulators
 
@@ -54,7 +54,13 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 
-To use the live resource monitor, run locally with `psutil` installed (it is included in `requirements.txt`).
+To use the live resource monitor from the hosted website on this Windows laptop:
+
+1. Keep this repository folder on the laptop and install dependencies once with `py -3.13 -m pip install -r requirements.txt`.
+2. In PowerShell, run `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install_laptop_monitor.ps1` from the repository folder. This registers a per-user task that starts the local, read-only monitor after sign-in.
+3. Open the deployed website in a browser on this same laptop and choose **Live Resource Monitor**. Allow local network access for the site if the browser asks.
+
+The laptop must be powered on, awake, signed in, and connected to the internet. The local monitor listens only on loopback (`127.0.0.1`) and accepts browser requests from the official OSLab deployment origin. The hosted site cannot monitor this laptop when opened on a different device.
 
 ## Deploy on Render
 

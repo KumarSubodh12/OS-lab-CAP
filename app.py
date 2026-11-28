@@ -10,6 +10,7 @@ from flask import Flask, jsonify, render_template, request
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config["MAX_CONTENT_LENGTH"] = 1024 * 1024
 PUBLIC_DEMO = os.getenv("OSLAB_DEMO", "0").lower() in {"1", "true", "yes"}
+MONITOR_CLIENT_ORIGIN = "https://os-lab-cap.onrender.com"
 
 
 def body():
@@ -289,8 +290,14 @@ def api_shell():
     return jsonify({"output":out,"cwd":cwd,"files":files,"dirs":sorted(dirs)})
 
 
-@app.get("/api/monitor")
+@app.route("/api/monitor", methods=["GET", "OPTIONS"])
 def api_monitor():
+    # The deployed site may read this one endpoint from the visitor's own
+    # loopback service. Never grant cross-origin access to any other origin.
+    origin = request.headers.get("Origin")
+    if origin and origin != MONITOR_CLIENT_ORIGIN:
+        return jsonify(error="This origin is not allowed to read local monitoring data."), 403
+    if request.method == "OPTIONS": return "", 204
     if PUBLIC_DEMO: return jsonify(error="Live host monitoring is only available when running locally."), 403
     try:
         import psutil
@@ -313,7 +320,13 @@ def security_headers(response):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"
-    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'"
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' http://127.0.0.1:5000; frame-ancestors 'none'; base-uri 'none'"
+    if request.path == "/api/monitor" and request.headers.get("Origin") == MONITOR_CLIENT_ORIGIN:
+        response.headers["Access-Control-Allow-Origin"] = MONITOR_CLIENT_ORIGIN
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        response.headers["Access-Control-Allow-Private-Network"] = "true"
+        response.headers["Vary"] = "Origin"
     if request.path.startswith("/api/"): response.headers["Cache-Control"] = "no-store"
     return response
 
