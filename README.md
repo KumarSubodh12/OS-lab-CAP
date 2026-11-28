@@ -9,7 +9,7 @@
 
 OSSim is a single, menu-driven application that demonstrates core operating-system resource-management functions. It brings CPU scheduling, memory allocation, deadlock safety, disk scheduling, performance comparison, CSV reporting, and activity logging into one integrated project.
 
-This repository is an adapted and maintained version of the upstream [OS-LAB-CAPTSONE-PROJECT](https://github.com/monishkabajaj/OS-LAB-CAPTSONE-PROJECT-). The upstream repository is linked here for source transparency; this version's project identification and documentation are maintained for the student listed above.
+This repository is an adapted and maintained version of the upstream [OS-LAB-CAPTSONE-PROJECT]. The upstream repository is linked here for source transparency; this version's project identification and documentation are maintained for the student listed above.
 
 ## Features
 
